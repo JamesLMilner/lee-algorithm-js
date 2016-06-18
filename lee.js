@@ -1,73 +1,92 @@
+if (typeof define !== 'function') {
+    var define = require('amdefine')(module);
+}
 
-    function pathfinder(matrix, x1, y1, x2, y2) {
+define([], function(){
 
-       var toVisit = [[x1, y1]]; // Initialise at the start square
+    var lee = (function() {
 
-       while(toVisit.length) { // While there are still squares to visit
+        var pathfinder = function (matrix, x1, y1, x2, y2) {
 
-           x = toVisit[0][0];
-           y = toVisit[0][1];
+            var toVisit = [[x1, y1]]; // Initialise at the start square
 
-           for (var i = x-1; i < x+2; i++)  {  // -1, 0, 1
-               for (var j = y-1; j < y+2; j++) { // -1, 0, 1
+            while(toVisit.length) { // While there are still squares to visit
 
-                if (neighbourCheck(matrix, i,j, x1, y1, 0)) {
+                x = toVisit[0][0];
+                y = toVisit[0][1];
 
-                    matrix[i][j] = matrix[x][y] + 1;
-                    //console.log("Changing value: " + [i, j] + " " + count);
-                    toVisit.push([i, j]);
+                for (var i = x-1; i < x+2; i++)  {  // -1, 0, 1
+                    for (var j = y-1; j < y+2; j++) { // -1, 0, 1
 
-                }
+                    if (neighbourCheck(matrix, i,j, x1, y1, 0)) {
 
-               }
-           }
-
-           var shift = toVisit.shift();
-           //console.log("Shifted visit ", shift);
-       }
-
-
-       var distance = matrix[x2][y2];
-       return [matrix, distance];
-
-    }
-
-    function backtrace(matrix, x1, y1, x2, y2) {
-
-        var finished = false;
-        var previousValue = matrix[x2][y2];
-        var successfulRoute = [];
-
-        var x = x2;
-        var y = y2;
-
-        while (x != x1 && y != y1) {
-
-            for (var i = x-1; i < x+2; i++)  {  // -1, 0, 1
-                for (var j = y-1; j < y+2; j++) { // -1, 0, 1
-
-                    if (neighbourCheck(matrix, i,j, x1, y1, previousValue - 1)) {
-
-                        previousValue = matrix[i][j];
-                        successfulRoute.push([i, j]);
-                        x = i;
-                        y = j;
+                        matrix[i][j] = matrix[x][y] + 1;
+                        //console.log("Changing value: " + [i, j] + " " + count);
+                        toVisit.push([i, j]);
 
                     }
 
+                   }
                 }
+
+               var shift = toVisit.shift();
+               //console.log("Shifted visit ", shift);
             }
 
-        }
 
-        successfulRoute.unshift([x2, y2]); // Add end point
-        successfulRoute.push([x1,y1]); // Add start point
-        return successfulRoute.reverse(); // Reverse the array so it's at the start
+            var distance = matrix[x2][y2];
+            return [matrix, distance];
 
-    }
+       };
 
-    function neighbourCheck(matrix, i, j, x1, y1, value) {
-        return matrix[i] && (matrix[i][j] === value) && // If array x array defined and the matrix value is 0
-        !(i === x && j === y) && // If it's not the center square
-        !(i === x1 && j === y1); // If it's not the first square
-    }
+        var backtrace = function(matrix, x1, y1, x2, y2) {
+
+            var finished = false;
+            var previousValue = matrix[x2][y2];
+            var successfulRoute = [];
+
+            var x = x2;
+            var y = y2;
+
+            while (x != x1 && y != y1) {
+
+                for (var i = x-1; i < x+2; i++)  {  // -1, 0, 1
+                    for (var j = y-1; j < y+2; j++) { // -1, 0, 1
+
+                        if (neighbourCheck(matrix, i,j, x1, y1, previousValue - 1)) {
+
+                            previousValue = matrix[i][j];
+                            successfulRoute.push([i, j]);
+                            x = i;
+                            y = j;
+
+                        }
+
+                    }
+                }
+
+            }
+
+            successfulRoute.unshift([x2, y2]); // Add end point
+            successfulRoute.push([x1,y1]); // Add start point
+            return successfulRoute.reverse(); // Reverse the array so it's at the start
+
+        };
+
+        var neighbourCheck = function(matrix, i, j, x1, y1, value) {
+            return matrix[i] && (matrix[i][j] === value) && // If array x array defined and the matrix value is 0
+            !(i === x && j === y) && // If it's not the center square
+            !(i === x1 && j === y1); // If it's not the first square
+        };
+
+        return {
+            pathfinder : pathfinder,
+            backtrace : backtrace,
+            neighbourCheck : neighbourCheck
+        };
+
+    })();
+
+    return lee;
+
+});
