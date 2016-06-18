@@ -71,14 +71,3 @@
         !(i === x && j === y) && // If it's not the center square
         !(i === x1 && j === y1); // If it's not the first square
     }
-
-    var aMatrix = [
-        [0,  0, 0,  0, 0],
-        [0, -1, -1, -1, 0],
-        [0,  0, -1, 0, -1],
-        [-1, 0, 0, 0, -1],
-        [-1, -1, -1, 0, -1]
-    ];
-
-    console.log("MATRIX : \n", pathfinder(aMatrix, 0, 0, 4, 3));
-    console.log("BEST PATH : \n", backtrace(aMatrix, 0, 0, 4, 3));
