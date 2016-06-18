@@ -23,3 +23,12 @@ The implementation takes a matrix n * m, a starting cell and an end cell. It can
     console.log("BEST PATH : \n", backtrace(aMatrix, 0, 0, 4, 3));
 
 ```
+
+# Tests
+
+The test suite uses Jasmine. You can use:
+
+    npm install
+    Jasmine
+
+to test the code.
