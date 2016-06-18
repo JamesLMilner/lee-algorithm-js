@@ -20,5 +20,9 @@
   "bugs": {
     "url": "https://github.com/JamesMilnerUK/lee-algorithm-js/issues"
   },
-  "homepage": "https://github.com/JamesMilnerUK/lee-algorithm-js#readme"
+  "homepage": "https://github.com/JamesMilnerUK/lee-algorithm-js#readme",
+  "devDependencies": {
+    "jasmine": "^2.4.1",
+    "systemjs": "^0.19.31"
+  }
 }
