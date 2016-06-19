@@ -22,7 +22,6 @@
   },
   "homepage": "https://github.com/JamesMilnerUK/lee-algorithm-js#readme",
   "devDependencies": {
-    "jasmine": "^2.4.1",
-    "systemjs": "^0.19.31"
+    "jasmine": "^2.4.1"
   }
 }

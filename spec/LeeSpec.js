@@ -1,75 +1,74 @@
 
 describe("Lee", function() {
 
-    var System = require('systemjs');
-
+    fs = require('fs');
+    leeCode = fs.readFileSync('lee.js','utf-8'); // depends on the file encoding
+    eval(leeCode);
 
     it("Check pathfinder defined", function() {
 
-        System.import('../lee.js').then(function(lee) {
-            expect(lee.pathfinder).toBeDefined();
-        });
+        expect(lee.pathfinder).toBeDefined();
 
     });
 
     it("Check backtrace defined", function() {
-        System.import('../lee.js').then(function(lee) {
-            expect(lee.neighbourCheck).toBeDefined();
-        });
+
+        expect(lee.neighbourCheck).toBeDefined();
+
     });
 
     it("Check pathfinder defined", function() {
-        System.import('../lee.js').then(function(lee) {
-            expect(lee.backtrace).toBeDefined();
-        });
+
+        expect(lee.backtrace).toBeDefined();
+
     });
 
     it("Checks to make sure the returned matrix is correct", function() {
-        System.import('../lee.js').then(function(lee) {
-            var aMatrix = [
-                [0,  0, 0,  0, 0],
-                [0, -1, -1, -1, 0],
-                [0,  0, 0, 0, -1],
-                [-1, 0, -1, 0, -1],
-                [-1, -1, -1, 0, -1]
-            ];
 
-            var checkedMatrix = lee.pathfinder(aMatrix, 0, 0, 4, 3);
-            console.log("Checked Matrix: \n", checkedMatrix);
+        var aMatrix = [
+            [0,  0, 0,  0, 0],
+            [0, -1, -1, -1, 0],
+            [0,  0, 0, 0, -1],
+            [-1, 0, -1, 0, -1],
+            [-1, -1, -1, 0, -1]
+        ];
 
-            // Check the structure of the matrix is correct
-            expect(checkedMatrix).toBeDefined();
-            expect(checkedMatrix.length).toBe(2);
-            expect(checkedMatrix[0].length).toBe(5);
-            expect(checkedMatrix[0][0].length).toBe(5);
+        var checkedMatrix = lee.pathfinder(aMatrix, 0, 0, 4, 3);
+        console.log("Checked Matrix: \n", checkedMatrix);
 
-            expect(checkedMatrix[0][0][0]).toBe(0); // Make sure the start is 0
-            expect(checkedMatrix[1]).toBe(5); // Make sure the end is 5
-        });
+        // Check the structure of the matrix is correct
+        expect(checkedMatrix).toBeDefined();
+        expect(checkedMatrix.length).toBe(2);
+        expect(checkedMatrix[0].length).toBe(5);
+        expect(checkedMatrix[0][0].length).toBe(5);
+
+        expect(checkedMatrix[0][0][0]).toBe(0); // Make sure the start is 0
+        expect(checkedMatrix[1]).toBe(5); // Make sure the end is 5
+
 
     });
 
     it("Checks to make sure the returned route is correct", function() {
 
-        System.import('../lee.js').then(function(lee) {
-            var aMatrix = [
-                [0,  0, 0,  0, 0],
-                [0, -1, -1, -1, 0],
-                [0,  0, 0, 0, -1],
-                [-1, 0, -1, 0, -1],
-                [-1, -1, -1, 0, -1]
-            ];
+        var aMatrix = [
+            [0,  0, 0,  0, 0],
+            [0, -1, -1, -1, 0],
+            [0,  0, 0, 0, -1],
+            [-1, 0, -1, 0, -1],
+            [-1, -1, -1, 0, -1]
+        ];
 
-            var checkedMatrix = lee.pathfinder(aMatrix, 0, 0, 4, 3);
-            var route = lee.backtrace(aMatrix, 0, 0, 4, 3);
-            expect(route.length).toBe(6); // Make sure the length is correct
+        var checkedMatrix = lee.pathfinder(aMatrix, 0, 0, 4, 3);
+        var route = lee.backtrace(aMatrix, 0, 0, 4, 3);
 
-            expect(route[0][0]).toBe(0); // Make sure the start is 0, 0
-            expect(route[0][1]).toBe(0);
-            expect(route[5][0]).toBe(4); // Make sure the end is 4,3
-            expect(route[5][1]).toBe(3);
-        });
-
+        expect(route.length).toBe(6); // Make sure the length is correct
+        
+        expect(route[0][0]).toBe(0); // Make sure the start is 0, 0
+        expect(route[0][1]).toBe(0);
+        expect(route[5][0]).toBe(4); // Make sure the end is 4,3
+        expect(route[5][1]).toBe(3);
     });
-    
+
+    // END OF TESTS
+
 });

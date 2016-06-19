@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>  Maze Path Finding Using Lee's Algorithm </title>
+        <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+        <style>
+            html, body {
+                font-family: 'Open Sans', sans-serif;
+            }
+            .title {
+                text-align: center;
+            }
+            #matrix, .matrix-code{
+                margin: auto;
+
+            }
+            .matrix-code {
+                display: inline;
+                margin: auto;
+            }
+            #maze-button-holder {
+                margin: auto;
+                text-align: center;
+                margin-bottom: 30px;
+
+            }
+            #maze-button {
+                padding: 20px;
+                border : 1px black solid;
+                background-color:white;
+                width: 200px;
+                cursor: pointer;
+            }
+            .cell, .cell-route  {
+                padding: 15px;
+                background-color: #c1c1c1;
+                text-align: center;
+            }
+            .cell-route {
+                font-weight: bold;
+                opacity: 0.6;
+                border: rgb(0, 0, 0) solid 3px;
+            }
+
+        </style>
+    </head>
+    <body>
+
+    <h1 class="title">Maze Path Finding</h1>
+
+    <p style="text-align: center;">
+        Let us imagine the Maze as a matrix made up of 0s (empty space) and -1s (walls/obstacles) like so:
+    </p>
+
+    <div class="matrix-code">
+        <code><pre class="matrix-code">
+
+            var aMatrix = [
+                [0,  0, 0,  0, 0],
+                [0, -1, -1, -1, 0],
+                [0,  0, 0, 0, -1],
+                [-1, 0, -1, 0, -1],
+                [-1, -1, -1, 0, -1]
+            ];
+
+        </code></pre>
+    </div>
+
+
+    <div id="maze-button-holder">
+        <button id="maze-button"> Generate Maze </button>
+    </div>
+
+
+    <table id="matrix"></table>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <script src="lee.js"></script>
+    <script src="tinycolor.js"></script>
+    <script src="tinygradient.js"></script>
+    <script>
+
+        $("#maze-button").click(function(){
+            generateView();
+        });
+
+        function generateView() {
+
+            $("#matrix").empty();
+
+            var x1 = 0;
+            var y1 = 1;
+            var x2 = 6;
+            var y2 = 6;
+
+            var gradient = tinygradient('#ff4343','#4949ff');
+            var maxVal = -1;
+
+            while (maxVal < 1) { // Sometimes we generate an incompletable matrix
+                var aMatrix = generateRandomMatrix(8, 8, x1, y1, x2, y2);
+                var checkedMatrix = lee.pathfinder(aMatrix, x1, y1, x2, y2);
+                var maxVal = checkedMatrix[1];
+            }
+
+            var colors = gradient.rgb(maxVal + 2); // We start at 0
+            var matrix = checkedMatrix[0];
+
+            var route = lee.backtrace(matrix, x1, y1, x2, y2);
+            console.log(route);
+
+            var count = 0;
+            var routePos = route[count];
+
+            for (var i = 0; i < matrix.length; i++){
+                var rowHtml = "<tr class='row'></tr>"
+                var row = $(rowHtml).appendTo("#matrix");
+
+                for (var j=0; j < matrix.length ; j++) {
+
+                    var cellVal = matrix[i][j];
+
+                    //console.log(routePos, i, routePos[0] , j, routePos[1])
+                    // if (routePos && i === routePos[0] && j === routePos[1] ) {
+                    //
+                    //     console.log("adding route cell", i, j, "cell val ", cellVal)
+                    //     var cellHtml = "<td class='cell-route'>"+cellVal+"</td>";
+                    //     count += 1;
+                    //     routePos = route[count];
+                    //
+                    // } else {
+                        var cellHtml = "<td class='cell'>"+cellVal+"</td>";
+                    //}
+
+                    var cell = $(cellHtml).appendTo(row);
+                    if (cellVal == 0 && (routePos && routePos[0] != x1 && routePos[1] != y1)) {
+                        cell.css("background-color", "#e2e2e0");
+                    } else {
+                        cell.css("background-color", colors[cellVal]);
+                    }
+
+                }
+
+            }
+
+            for (var i=0; i < route.length; i++) {
+                var x = route[i][0];
+                var y = route[i][1];
+                var targetCell = $("#matrix").find("tr").eq(x).find("td").eq(y);
+                targetCell.removeClass("cell");
+                targetCell.addClass("cell-route");
+            }
+
+        }
+
+        function generateRandomMatrix(rows, cols, x1, y1, x2, y2) {
+
+            var matrix = [];
+            var percentChance = 0.5;
+
+            for (var i = 0; i < rows; i++){
+                matrix.push([]);
+                for (var j=0; j < cols; j++) {
+
+                    if (Math.random() < percentChance) {
+                        matrix[i].push(0);
+                    } else {
+                        matrix[i].push(-1);
+                    }
+
+                }
+            }
+
+            matrix[x1][y1] = 0;
+            matrix[x2][y2] = 0;
+
+            //console.log(x1, y1, x2, y2, matrix[x1][y1], matrix[x2][y2])
+
+            //console.log("MATRIX: ", matrix);
+
+            return matrix;
+
+        }
+
+        generateView();
+
+    </script>
+    </body>
+</html>
