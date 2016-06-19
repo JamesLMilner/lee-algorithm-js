@@ -150,7 +150,8 @@ var aMatrix = [
                     var cellHtml = "<td class='cell'>"+cellVal+"</td>";
 
                     var cell = $(cellHtml).appendTo(row);
-                    if (cellVal == 0 && (routePos && routePos[0] != x1 && routePos[1] != y1)) {
+                    if ( cellVal == 0 && (routePos && !( routePos[0] === i && routePos[1] === j) ) ) {
+                        // Grey out unreachable nodes
                         cell.css("background-color", "#e2e2e0");
                     } else {
                         cell.css("background-color", colors[cellVal]);
