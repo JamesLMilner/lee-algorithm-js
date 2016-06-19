@@ -10,19 +10,32 @@
             .title {
                 text-align: center;
             }
+
+            .text-box {
+                width: 400px;
+                text-align: justify;
+                margin: auto;
+                padding-top: 10px;
+                padding-bottom: 10px;
+            }
+            #matrix {
+                padding-bottom: 30px;
+            }
             #matrix, .matrix-code{
                 margin: auto;
-
             }
             .matrix-code {
-                display: inline;
-                margin: auto;
+                text-align: initial;
+                display: inline-block;
+            }
+            .matrix-code-holder {
+                width: 100%;
+                text-align: center;
             }
             #maze-button-holder {
                 margin: auto;
                 text-align: center;
                 margin-bottom: 30px;
-
             }
             #maze-button {
                 padding: 20px;
@@ -30,6 +43,7 @@
                 background-color:white;
                 width: 200px;
                 cursor: pointer;
+                        font-size: 18px;
             }
             .cell, .cell-route  {
                 padding: 15px;
@@ -41,6 +55,9 @@
                 opacity: 0.6;
                 border: rgb(0, 0, 0) solid 3px;
             }
+            .twitter {
+                text-align: center;
+            }
 
         </style>
     </head>
@@ -48,36 +65,48 @@
 
     <h1 class="title">Maze Path Finding</h1>
 
-    <p style="text-align: center;">
-        Let us imagine the Maze as a matrix made up of 0s (empty space) and -1s (walls/obstacles) like so:
-    </p>
-
-    <div class="matrix-code">
-        <code><pre class="matrix-code">
-
-            var aMatrix = [
-                [0,  0, 0,  0, 0],
-                [0, -1, -1, -1, 0],
-                [0,  0, 0, 0, -1],
-                [-1, 0, -1, 0, -1],
-                [-1, -1, -1, 0, -1]
-            ];
-
-        </code></pre>
+    <div class="text-box">
+        <p class="text">
+            Let us imagine the Maze as a matrix made up of 0s (empty space) and -1s (walls/obstacles) like so:
+        </p>
     </div>
 
+    <div class="matrix-code-holder" >
+        <div class="matrix-code">
+            <code><pre class="matrix-code">
+
+var aMatrix = [
+    [0,  0, 0,  0, 0],
+    [0, -1, -1, -1, 0],
+    [0,  0, 0, 0, -1],
+    [-1, 0, -1, 0, -1],
+    [-1, -1, -1, 0, -1]
+];
+            </code></pre>
+        </div>
+    </div>
+
+    <div class="text-box">
+        <p class="text">
+            The Lee Algorithm allows us to take an arbitary start and end cell within the matrix and attempt to calculate a viable route
+            through between the two cells.
+            Try it below!
+        </p>
+    </div>
 
     <div id="maze-button-holder">
         <button id="maze-button"> Generate Maze </button>
     </div>
 
-
     <table id="matrix"></table>
+    <div class="text-box">
+        <p class="twitter"> A little project by <a href="http://twitter.com/JamesLMilner">James Milner</a></p>
+    </div>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
     <script src="lee.js"></script>
-    <script src="tinycolor.js"></script>
-    <script src="tinygradient.js"></script>
+    <script src="libs/tinycolor.js"></script>
+    <script src="libs/tinygradient.js"></script>
     <script>
 
         $("#maze-button").click(function(){
@@ -106,7 +135,6 @@
             var matrix = checkedMatrix[0];
 
             var route = lee.backtrace(matrix, x1, y1, x2, y2);
-            console.log(route);
 
             var count = 0;
             var routePos = route[count];
@@ -119,17 +147,7 @@
 
                     var cellVal = matrix[i][j];
 
-                    //console.log(routePos, i, routePos[0] , j, routePos[1])
-                    // if (routePos && i === routePos[0] && j === routePos[1] ) {
-                    //
-                    //     console.log("adding route cell", i, j, "cell val ", cellVal)
-                    //     var cellHtml = "<td class='cell-route'>"+cellVal+"</td>";
-                    //     count += 1;
-                    //     routePos = route[count];
-                    //
-                    // } else {
-                        var cellHtml = "<td class='cell'>"+cellVal+"</td>";
-                    //}
+                    var cellHtml = "<td class='cell'>"+cellVal+"</td>";
 
                     var cell = $(cellHtml).appendTo(row);
                     if (cellVal == 0 && (routePos && routePos[0] != x1 && routePos[1] != y1)) {
@@ -142,9 +160,11 @@
 
             }
 
+            // Loop through the route and add some nice formatting
             for (var i=0; i < route.length; i++) {
                 var x = route[i][0];
                 var y = route[i][1];
+                // Get the cell using the x and y positions
                 var targetCell = $("#matrix").find("tr").eq(x).find("td").eq(y);
                 targetCell.removeClass("cell");
                 targetCell.addClass("cell-route");
@@ -155,7 +175,7 @@
         function generateRandomMatrix(rows, cols, x1, y1, x2, y2) {
 
             var matrix = [];
-            var percentChance = 0.5;
+            var percentChance = 0.5; // Chance to generate a -1 (wall)
 
             for (var i = 0; i < rows; i++){
                 matrix.push([]);
@@ -172,10 +192,6 @@
 
             matrix[x1][y1] = 0;
             matrix[x2][y2] = 0;
-
-            //console.log(x1, y1, x2, y2, matrix[x1][y1], matrix[x2][y2])
-
-            //console.log("MATRIX: ", matrix);
 
             return matrix;
 
