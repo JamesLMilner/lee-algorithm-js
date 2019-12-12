@@ -1,7 +1,7 @@
 # :runner: Lee Algorithm in JavaScript
 
 # Demo
-Check out a little demo [here](https://jamesmilneruk.github.io/lee-algorithm-js/) :)
+Check out a little demo [here](https://jameslmilner.github.io/lee-algorithm-js/) :)
 
 # What is it?
 
